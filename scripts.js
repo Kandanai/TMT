@@ -125,4 +125,33 @@ $(document).ready(function() {
         $("#deliverTruckModal").modal("hide");
         
     });
+
+    
 });
+
+document.getElementById("calculateBtn").addEventListener("click", function() {
+    
+    var currentMileage = parseFloat($("#Cmileage").val());
+    var fuelAdded = parseFloat($("#AddedFuel").val());
+    var mileage = parseFloat($("#mileage").val());
+    var ratePerGallon = parseFloat(document.getElementById("FuelPriceRate").value);
+
+    
+    var result = (fuelAdded - ((currentMileage - mileage) / 3))*ratePerGallon;
+
+     
+     var message;
+     if (result >= 0) {
+        message = $("#driverName").val() + " You will get " + result.toFixed(2) + "$ from the company.";
+    } else {
+        message = $("#driverName").val() + " You have to pay " + Math.abs(result).toFixed(2) + "$ for the company.";
+    }
+
+    
+    $("#calculationResult").text(message);
+    $('#calculationResultModal').modal('show');
+});
+
+
+
+
