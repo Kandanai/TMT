@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Function to get random color
     function getRandomColor() {
         var r = Math.floor(Math.random() * 128) + 128;
@@ -30,13 +30,13 @@ $(document).ready(function() {
     }
 
     // Event handler for clicking "Add Card" button
-    $("#addCardBtn").click(function(event) {
+    $("#addCardBtn").click(function (event) {
         event.preventDefault();
-        addCard();
+        $('#cardDetailsModal').modal('show');
     });
 
     // Event handler for submitting card details form
-    $("#cardDetailsForm").submit(function(event) {
+    $("#cardDetailsForm").submit(function (event) {
         event.preventDefault();
         var truckName = $("#truckName").val();
         var mileage = $("#mileage").val();
@@ -49,7 +49,7 @@ $(document).ready(function() {
             existingCard.find(".card-title").text(truckName);
             existingCard.find(".mileage-text").text("Mileage: " + mileage);
             existingCard.find(".date-text").text("Date: " + date);
-            existingCard.find(".driver-text").text("Driver: " + driverName); 
+            existingCard.find(".driver-text").text("Driver: " + driverName);
             existingCard.removeClass("editing");
         } else {
             var randomColor = getRandomColor();
@@ -69,63 +69,96 @@ $(document).ready(function() {
         }
 
         $("#cardDetailsForm")[0].reset();
-        $('#cardDetailsModal').modal('hide'); 
+        $('#cardDetailsModal').modal('hide');
+        addCard;
     });
 
     // Event handler for clicking a card
-    $("#cardContainer").on("click", ".card", function() {
+    $("#cardContainer").on("click", ".card", function () {
         $(".card").removeClass("editing");
         $(this).addClass("editing");
-        
+
         var truckName = $(this).find(".card-title").text();
         var mileage = $(this).find(".mileage-text").text().split(":")[1].trim();
         var date = $(this).find(".date-text").text().split(":")[1].trim();
-        var driverName = $(this).find(".driver-text").text().split(":")[1].trim(); 
+        var driverName = $(this).find(".driver-text").text().split(":")[1].trim();
         $("#truckName").val(truckName);
         $("#mileage").val(mileage);
         $("#date").val(date);
-        $("#driverName").val(driverName); 
+        $("#driverName").val(driverName);
     });
 
-    // Event handler for deleting a card
-    $("#deleteCardBtn").click(function() {
+    // Event handler for deleting a card with confirmation and input for truck registration number
+    $("#deleteCardBtn").click(function () {
         var editedCard = $(".card.editing");
-        editedCard.parent().remove();
-        $("#cardDetailsForm")[0].reset();
-        $('#cardDetailsModal').modal('hide');
+        $('#cardDetailsModal').modal('hide'); // ซ่อน card details modal
+        $('#confirmationModal').modal('show'); // แสดง confirmation modal
+
+        // Event handler for the back button in confirmation modal
+        $('#backToCardDetailBtn').off().click(function () {
+            $('#confirmationModal').modal('hide'); // ซ่อน confirmation modal
+            $('#cardDetailsModal').modal('show'); // แสดง card details modal
+        });
+
+        // Event handler for the delete confirmation button
+        $('#confirmDeleteBtn').off().click(function () {
+            var truckRegNumber = $("#truckRegNumber").val(); // รับเลขทะเบียนรถจาก input field
+            var cardTruckName = editedCard.find(".card-title").text(); // รับชื่อรถของการ์ดที่กำลังจะลบ
+
+            if (truckRegNumber === cardTruckName) { // ตรวจสอบว่าเลขทะเบียนรถตรงกับรายการหรือไม่
+                editedCard.parent().remove(); // ลบการ์ดออกจาก DOM
+                $("#cardDetailsForm")[0].reset(); // รีเซ็ตฟอร์ม
+                $('#confirmationModal').modal('hide'); // ซ่อน confirmation modal
+            } else {
+                alert("License Plate Number does not match. Please enter the correct one to delete this card.");
+            }
+        });
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Event handler for showing "Deliver Truck Details" modal
-    $("#deliverTruckBtn").click(function() {
-        $('#cardDetailsModal').modal('hide'); 
-        $('#deliverTruckModal').modal('show'); 
+    $("#deliverTruckBtn").click(function () {
+        $('#cardDetailsModal').modal('hide');
+        $('#deliverTruckModal').modal('show');
     });
 
     // Event handler for going back from "Deliver Truck Details" modal
-    $("#goBackBtn").click(function() {
-        $('#cardDetailsModal').modal('show'); 
-        $('#deliverTruckModal').modal('hide'); 
+    $("#goBackBtn").click(function () {
+        $('#cardDetailsModal').modal('show');
+        $('#deliverTruckModal').modal('hide');
     });
 
     // Event handler for calculating result
-    $("#calculateBtn").click(function() {
+    $("#calculateBtn").click(function () {
         $('.modal').modal('hide');
         $('#calculationResultModal').modal('show').css('display', 'block');
     });
 
     // Event handler for going back from calculation result modal
-    $("#goBackBtn").click(function() {
+    $("#goBackBtn").click(function () {
         $("#deliverTruckModal").modal("hide");
     });
 
     // Event handler for calculating result and displaying it
-    $("#calculateBtn").click(function() {
+    $("#calculateBtn").click(function () {
         var currentMileage = parseFloat($("#Cmileage").val());
         var fuelAdded = parseFloat($("#AddedFuel").val());
         var mileage = parseFloat($("#mileage").val());
         var ratePerGallon = parseFloat($("#FuelPriceRate").val());
 
-        var result = (fuelAdded - ((currentMileage - mileage) / 3))*ratePerGallon;
+        var result = (fuelAdded - ((currentMileage - mileage) / 3)) * ratePerGallon;
         var message;
         if (result >= 0) {
             message = $("#driverName").val() + " You will get " + result.toFixed(2) + "$ from the company.";
@@ -137,7 +170,7 @@ $(document).ready(function() {
     });
 
     // Store data in localStorage when unloading the page
-    $(window).on('unload', function() {
+    $(window).on('unload', function () {
         // Save data to localStorage
         var cardContainerHTML = $("#cardContainer").html();
         localStorage.setItem('cardContainerHTML', cardContainerHTML);
@@ -195,7 +228,7 @@ $(document).ready(function() {
     if (storedDDate) {
         $("#DDate").val(storedDDate);
     }
-    
+
 });
 
 

@@ -26,29 +26,49 @@ h1.text-center.mb-4 {
 .driver-text,
 .mileage-text,
 .date-text {
-    margin-bottom: 2px; 
+    margin-bottom: 2px;
 }
 
 #deliverTruckBtn {
-    margin-top: 10px; 
+    margin-top: 10px;
 }
 
 #calculateBtn {
     background-color: green;
 }
 
+#cardDetailsModal {
+    position: fixed;
+    top: 12%;
+    left: 0%;
+    
+}
+
+
+
 #calculationResultModal {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -44%);
-    width: 500px; 
-    height: 500px; 
+    width: 500px;
+    height: 500px;
     justify-content: center;
-    
-    
-    padding: 20px; 
-  }
-  
 
+
+    padding: 20px;
+}
+
+#confirmationModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -51%);
+    width: 500px;
+    height: 500px;
+    justify-content: center;
+
+
+    padding: 20px;
+}
 
